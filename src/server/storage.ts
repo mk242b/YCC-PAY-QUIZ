@@ -27,3 +27,19 @@ export function saveLeaderboardEntry(entry: LeaderboardEntry): LeaderboardEntry[
   fs.writeFileSync(LEADERBOARD_PATH, JSON.stringify(list, null, 2), 'utf-8');
   return list;
 }
+
+export function saveQuestions(questions: Question[]) {
+  if (!fs.existsSync(path.dirname(QUESTIONS_PATH))) {
+    fs.mkdirSync(path.dirname(QUESTIONS_PATH), { recursive: true });
+  }
+  fs.writeFileSync(QUESTIONS_PATH, JSON.stringify(questions, null, 2), 'utf-8');
+}
+
+export function addQuestion(qData: Omit<Question, 'id'>): Question {
+  const list = loadQuestions();
+  const nextId = list.length > 0 ? Math.max(...list.map(q => q.id)) + 1 : 1;
+  const newQ: Question = { ...qData, id: nextId };
+  list.push(newQ);
+  saveQuestions(list);
+  return newQ;
+}

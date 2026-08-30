@@ -4,6 +4,7 @@ import { io, Socket } from 'socket.io-client';
 export function PlayerRemote() {
   const [view, setView] = useState<'login' | 'play' | 'gameover'>('login');
   const [name, setName] = useState('');
+  const [question, setQuestion] = useState('');
   const [choices, setChoices] = useState<string[]>([]);
   const [disabled, setDisabled] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -15,7 +16,8 @@ export function PlayerRemote() {
     const socket = io();
     socketRef.current = socket;
 
-    socket.on('round:player', (data: { choices: string[] }) => {
+    socket.on('round:player', (data: { question: string; choices: string[] }) => {
+      setQuestion(data.question);
       setChoices(data.choices);
       setDisabled(false);
       setSelectedIndex(null);
@@ -75,6 +77,7 @@ export function PlayerRemote() {
 
       {view === 'play' && (
         <div className="w-full max-w-sm flex flex-col gap-4 h-full py-8 animate-in fade-in">
+          <h2 className="text-2xl font-bold text-center text-[#0eba8e] mb-4">{question}</h2>
           <div className="flex-1 flex flex-col justify-center gap-4">
             {choices.map((choice, index) => {
               let btnClass = "bg-black border-[#0eba8e]/50 hover:bg-[#0eba8e]/20 text-[#0eba8e]";

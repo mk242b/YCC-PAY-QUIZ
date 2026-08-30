@@ -83,7 +83,7 @@ export function HostDisplay() {
     <div className="min-h-screen bg-black text-[#0eba8e] font-sans overflow-hidden flex items-center justify-center">
       {view === 'lobby' && (
         <div className="w-full max-w-4xl text-center flex flex-col items-center animate-in fade-in zoom-in duration-500 py-12">
-          <h1 className="text-5xl font-bold mb-8 text-[#0eba8e]">Quiz Arena Host</h1>
+          <h1 className="text-5xl font-bold mb-8 text-[#0eba8e]">YCC Pay Quiz</h1>
           
           <div className="flex flex-row gap-12 w-full justify-center items-start mt-4">
             <div className="flex flex-col items-center bg-black border border-[#0eba8e] p-8 rounded-2xl">

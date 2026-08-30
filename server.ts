@@ -3,12 +3,13 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import path from 'path';
 import os from 'os';
-import { loadQuestions, loadLeaderboard, saveLeaderboardEntry } from './src/server/storage.js';
+import { loadQuestions, loadLeaderboard, saveLeaderboardEntry, addQuestion } from './src/server/storage.js';
 import { Question, LeaderboardEntry } from './src/server/types.js';
 import { createServer as createViteServer } from 'vite';
 
 async function startServer() {
   const app = express();
+  app.use(express.json());
   const httpServer = createServer(app);
   const io = new Server(httpServer, { cors: { origin: '*' } });
   const PORT = 3000;
@@ -57,6 +58,7 @@ async function startServer() {
     });
 
     io.emit('round:player', {
+      question: q.question,
       choices: q.choices,
       timeLimitSec: q.timeLimitSec
     });
@@ -119,6 +121,19 @@ async function startServer() {
     socket.on('answer:submit', (data: { choiceIndex: number }) => {
       handleAnswer(data.choiceIndex);
     });
+  });
+
+  app.get('/api/questions', (req, res) => {
+    res.json(loadQuestions());
+  });
+
+  app.post('/api/questions', (req, res) => {
+    const { question, choices, correctIndex, timeLimitSec } = req.body;
+    if (!question || !choices || choices.length !== 3 || correctIndex < 0 || correctIndex > 2) {
+      return res.status(400).json({ error: 'Invalid data' });
+    }
+    const newQ = addQuestion({ question, choices, correctIndex, timeLimitSec: timeLimitSec || 15 });
+    res.json(newQ);
   });
 
   // Vite middleware for development
