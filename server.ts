@@ -54,7 +54,8 @@ async function startServer() {
       question: q.question,
       current: currentQuestionIndex + 1,
       total: questions.length,
-      timeLimitSec: q.timeLimitSec
+      timeLimitSec: q.timeLimitSec,
+      currentScore
     });
 
     io.emit('round:player', {
@@ -80,24 +81,18 @@ async function startServer() {
     const q = questions[currentQuestionIndex];
     const elapsedSec = (Date.now() - roundStartTime) / 1000;
     const remainingSec = Math.max(0, q.timeLimitSec - elapsedSec);
-    const isCorrect = choiceIndex === q.correctIndex;
     
-    let points = 0;
-    if (isCorrect) {
-      points = Math.round(1000 + (remainingSec / q.timeLimitSec) * 1000);
-      currentScore += points;
-      correctCount++;
+    if (choiceIndex !== -1) {
+      const isCorrect = choiceIndex === q.correctIndex;
+      if (isCorrect) {
+        const points = Math.round(1000 + (remainingSec / q.timeLimitSec) * 1000);
+        currentScore += points;
+        correctCount++;
+      }
     }
 
-    io.emit('round:result', {
-      isCorrect,
-      correctIndex: q.correctIndex,
-      pointsAwarded: points,
-      totalScore: currentScore
-    });
-
     currentQuestionIndex++;
-    setTimeout(startRound, 3000);
+    startRound();
   }
 
   io.on('connection', (socket) => {
@@ -118,7 +113,7 @@ async function startServer() {
         const j = Math.floor(Math.random() * (i + 1));
         [loaded[i], loaded[j]] = [loaded[j], loaded[i]];
       }
-      questions = loaded;
+      questions = loaded.slice(0, 10);
 
       io.emit('game:ready', { playerName: currentPlayerName, totalQuestions: questions.length });
       setTimeout(startRound, 2000);

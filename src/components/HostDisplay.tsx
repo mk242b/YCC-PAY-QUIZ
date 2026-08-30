@@ -15,7 +15,6 @@ export function HostDisplay() {
   const [timeLimitSec, setTimeLimitSec] = useState(0);
   
   const [score, setScore] = useState(0);
-  const [feedback, setFeedback] = useState({ text: '', type: '' });
   const [timerWidth, setTimerWidth] = useState('100%');
   const [timerTransition, setTimerTransition] = useState('none');
   
@@ -42,12 +41,12 @@ export function HostDisplay() {
       setTimeout(() => setView('game'), 2000);
     });
 
-    socket.on('round:host', (data: { question: string; current: number; total: number; timeLimitSec: number }) => {
-      setFeedback({ text: '', type: '' });
+    socket.on('round:host', (data: { question: string; current: number; total: number; timeLimitSec: number; currentScore: number }) => {
       setCurrent(data.current);
       setTotal(data.total);
       setQuestion(data.question);
       setTimeLimitSec(data.timeLimitSec);
+      setScore(data.currentScore);
       
       setTimerTransition('none');
       setTimerWidth('100%');
@@ -56,16 +55,6 @@ export function HostDisplay() {
         setTimerTransition(`width ${data.timeLimitSec}s linear`);
         setTimerWidth('0%');
       }, 50);
-    });
-
-    socket.on('round:result', (data: { isCorrect: boolean; pointsAwarded: number; totalScore: number }) => {
-      setScore(data.totalScore);
-      setFeedback({
-        text: data.isCorrect ? `Correct! +${data.pointsAwarded} pts` : `Incorrect / Timeout! +0 pts`,
-        type: data.isCorrect ? 'correct' : 'incorrect'
-      });
-      setTimerTransition('none');
-      setTimerWidth('0%');
     });
 
     socket.on('game:over', (data: { finalScore: number; leaderboard: LeaderboardEntry[] }) => {
@@ -135,14 +124,6 @@ export function HostDisplay() {
           <h2 className="text-5xl font-bold text-center leading-tight mb-auto shadow-sm">
             {question || 'Loading...'}
           </h2>
-          
-          <div className="h-24 mt-8 flex items-center justify-center">
-            {feedback.text && (
-              <div className="text-4xl font-bold animate-in slide-in-from-bottom-8 fade-in">
-                {feedback.text}
-              </div>
-            )}
-          </div>
         </div>
       )}
 

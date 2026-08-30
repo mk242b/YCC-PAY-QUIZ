@@ -8,24 +8,33 @@ export function PlayerRemote() {
   const [choices, setChoices] = useState<string[]>([]);
   const [disabled, setDisabled] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [correctIndex, setCorrectIndex] = useState<number | null>(null);
+  
+  const [timeLimitSec, setTimeLimitSec] = useState(0);
+  const [timeRemaining, setTimeRemaining] = useState(0);
 
   const socketRef = useRef<Socket | null>(null);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (timeRemaining > 0 && view === 'play') {
+      interval = setInterval(() => {
+        setTimeRemaining(prev => Math.max(0, prev - 1));
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [timeRemaining, view]);
 
   useEffect(() => {
     const socket = io();
     socketRef.current = socket;
 
-    socket.on('round:player', (data: { question: string; choices: string[] }) => {
+    socket.on('round:player', (data: { question: string; choices: string[]; timeLimitSec: number }) => {
       setQuestion(data.question);
       setChoices(data.choices);
+      setTimeLimitSec(data.timeLimitSec);
+      setTimeRemaining(data.timeLimitSec);
       setDisabled(false);
       setSelectedIndex(null);
-      setCorrectIndex(null);
-    });
-
-    socket.on('round:result', (data: { isCorrect: boolean; correctIndex: number }) => {
-      setCorrectIndex(data.correctIndex);
     });
 
     socket.on('game:over', () => {
@@ -77,19 +86,19 @@ export function PlayerRemote() {
 
       {view === 'play' && (
         <div className="w-full max-w-sm flex flex-col gap-4 h-full py-8 animate-in fade-in">
+          <div className="w-full h-2 bg-black border border-[#0eba8e] rounded-full overflow-hidden mb-2">
+            <div 
+              className="h-full bg-[#0eba8e] transition-all duration-1000 ease-linear"
+              style={{ width: `${timeLimitSec > 0 ? (timeRemaining / timeLimitSec) * 100 : 0}%` }}
+            />
+          </div>
+          <div className="text-center font-mono text-xl font-bold mb-4">{timeRemaining}s</div>
+          
           <h2 className="text-2xl font-bold text-center text-[#0eba8e] mb-4">{question}</h2>
           <div className="flex-1 flex flex-col justify-center gap-4">
             {choices.map((choice, index) => {
               let btnClass = "bg-black border-[#0eba8e]/50 hover:bg-[#0eba8e]/20 text-[#0eba8e]";
-              if (correctIndex !== null) {
-                if (index === correctIndex) {
-                  btnClass = "bg-[#0eba8e] border-[#0eba8e] text-black shadow-lg shadow-[#0eba8e]/20";
-                } else if (index === selectedIndex) {
-                  btnClass = "bg-black border-red-500 text-red-500 shadow-lg shadow-red-900/50";
-                } else {
-                  btnClass = "bg-black border-[#0eba8e]/20 text-[#0eba8e]/50 opacity-50";
-                }
-              } else if (selectedIndex === index) {
+              if (selectedIndex === index) {
                 btnClass = "bg-black border-[#0eba8e] text-[#0eba8e] shadow-lg shadow-[#0eba8e]/20 bg-[#0eba8e]/10";
               }
 
@@ -98,7 +107,7 @@ export function PlayerRemote() {
                   key={index}
                   disabled={disabled}
                   onClick={() => handleAnswer(index)}
-                  className={`w-full py-8 px-6 text-2xl font-bold border-2 rounded-2xl transition-all duration-200 active:scale-95 flex items-center justify-center ${btnClass} ${disabled && correctIndex === null && selectedIndex !== index ? 'opacity-50' : ''}`}
+                  className={`w-full py-8 px-6 text-2xl font-bold border-2 rounded-2xl transition-all duration-200 active:scale-95 flex items-center justify-center ${btnClass} ${disabled && selectedIndex !== index ? 'opacity-50' : ''}`}
                 >
                   {choice}
                 </button>
