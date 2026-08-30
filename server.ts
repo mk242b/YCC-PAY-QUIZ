@@ -99,6 +99,12 @@ async function startServer() {
   }
 
   io.on('connection', (socket) => {
+    socket.emit('host:init', {
+      leaderboard: loadLeaderboard(),
+      lanIp: getLocalIp(),
+      port: PORT
+    });
+
     socket.on('player:join', (data: { name: string }) => {
       currentPlayerName = data.name.trim() || 'Player 1';
       currentScore = 0;
