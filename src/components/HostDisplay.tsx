@@ -148,6 +148,15 @@ export function HostDisplay() {
               ))}
             </div>
           </div>
+          
+          <div className="mt-12">
+            <button
+              onClick={() => setView('lobby')}
+              className="bg-black border-2 border-[#0eba8e] hover:bg-[#0eba8e] hover:text-black text-[#0eba8e] font-bold text-xl py-4 px-12 rounded-xl transition-all active:scale-95"
+            >
+              Back to Lobby
+            </button>
+          </div>
         </div>
       )}
     </div>

@@ -12,6 +12,7 @@ export function PlayerRemote() {
   const [timeLimitSec, setTimeLimitSec] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [playerResults, setPlayerResults] = useState<{question: string, isCorrect: boolean}[]>([]);
+  const [showPlayAgain, setShowPlayAgain] = useState(false);
 
   const socketRef = useRef<Socket | null>(null);
 
@@ -41,6 +42,7 @@ export function PlayerRemote() {
     socket.on('game:over', (data: { playerResults: { question: string, isCorrect: boolean }[] }) => {
       setPlayerResults(data.playerResults || []);
       setView('gameover');
+      setTimeout(() => setShowPlayAgain(true), 2500);
     });
 
     return () => {
@@ -141,12 +143,18 @@ export function PlayerRemote() {
             ))}
           </div>
 
-          <button
-            onClick={() => window.location.reload()}
-            className="w-full bg-black border-2 border-[#0eba8e] hover:bg-[#0eba8e] hover:text-black text-[#0eba8e] font-bold text-xl py-4 rounded-xl transition-all active:scale-95 shrink-0"
-          >
-            Play Again
-          </button>
+          {showPlayAgain ? (
+            <button
+              onClick={() => window.location.reload()}
+              className="w-full bg-black border-2 border-[#0eba8e] hover:bg-[#0eba8e] hover:text-black text-[#0eba8e] font-bold text-xl py-4 rounded-xl transition-all active:scale-95 shrink-0 animate-in fade-in slide-in-from-bottom-4 duration-500"
+            >
+              Play Again
+            </button>
+          ) : (
+            <div className="w-full py-4 shrink-0 text-[#0eba8e]/50 font-bold text-xl animate-pulse">
+              Please wait...
+            </div>
+          )}
         </div>
       )}
     </div>
