@@ -19,6 +19,7 @@ async function startServer() {
   let currentPlayerName = '';
   let currentScore = 0;
   let correctCount = 0;
+  let currentRoundResults: { question: string; isCorrect: boolean }[] = [];
   let roundTimer: NodeJS.Timeout | null = null;
   let roundStartTime = 0;
 
@@ -42,7 +43,7 @@ async function startServer() {
         timestamp: new Date().toISOString()
       };
       const updatedLeaderboard = saveLeaderboardEntry(entry);
-      io.emit('game:over', { finalScore: currentScore, leaderboard: updatedLeaderboard });
+      io.emit('game:over', { finalScore: currentScore, leaderboard: updatedLeaderboard, playerResults: currentRoundResults });
       return;
     }
 
@@ -84,11 +85,14 @@ async function startServer() {
     
     if (choiceIndex !== -1) {
       const isCorrect = choiceIndex === q.correctIndex;
+      currentRoundResults.push({ question: q.question, isCorrect });
       if (isCorrect) {
-        const points = Math.round(1000 + (remainingSec / q.timeLimitSec) * 1000);
+        const points = Math.round(10 + (remainingSec / q.timeLimitSec) * 10);
         currentScore += points;
         correctCount++;
       }
+    } else {
+      currentRoundResults.push({ question: q.question, isCorrect: false });
     }
 
     currentQuestionIndex++;
@@ -107,6 +111,7 @@ async function startServer() {
       currentScore = 0;
       correctCount = 0;
       currentQuestionIndex = 0;
+      currentRoundResults = [];
       
       const loaded = loadQuestions();
       for (let i = loaded.length - 1; i > 0; i--) {

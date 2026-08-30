@@ -11,6 +11,7 @@ export function PlayerRemote() {
   
   const [timeLimitSec, setTimeLimitSec] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(0);
+  const [playerResults, setPlayerResults] = useState<{question: string, isCorrect: boolean}[]>([]);
 
   const socketRef = useRef<Socket | null>(null);
 
@@ -37,7 +38,8 @@ export function PlayerRemote() {
       setSelectedIndex(null);
     });
 
-    socket.on('game:over', () => {
+    socket.on('game:over', (data: { playerResults: { question: string, isCorrect: boolean }[] }) => {
+      setPlayerResults(data.playerResults || []);
       setView('gameover');
     });
 
@@ -124,12 +126,24 @@ export function PlayerRemote() {
       )}
 
       {view === 'gameover' && (
-        <div className="w-full max-w-sm text-center bg-black border border-[#0eba8e] p-8 rounded-3xl animate-in zoom-in-95">
-          <h2 className="text-3xl font-bold text-[#0eba8e] mb-4">Game Completed!</h2>
-          <p className="text-[#0eba8e]/70 text-lg mb-8">Check the main screen for rankings.</p>
+        <div className="w-full max-w-md text-center bg-black border border-[#0eba8e] p-6 rounded-3xl animate-in zoom-in-95 max-h-[90vh] flex flex-col">
+          <h2 className="text-3xl font-bold text-[#0eba8e] mb-2">Game Completed!</h2>
+          <p className="text-[#0eba8e]/70 text-lg mb-6">Check the main screen for rankings.</p>
+          
+          <div className="flex-1 overflow-y-auto mb-6 space-y-3 text-left">
+            {playerResults.map((result, idx) => (
+              <div key={idx} className={`p-4 border rounded-xl ${result.isCorrect ? 'border-green-500 bg-green-500/10' : 'border-red-500 bg-red-500/10'}`}>
+                <p className="font-bold text-sm mb-1 line-clamp-2">{idx + 1}. {result.question}</p>
+                <p className={`font-mono font-bold ${result.isCorrect ? 'text-green-500' : 'text-red-500'}`}>
+                  {result.isCorrect ? '✓ Correct' : '✗ Incorrect'}
+                </p>
+              </div>
+            ))}
+          </div>
+
           <button
             onClick={() => window.location.reload()}
-            className="w-full bg-black border-2 border-[#0eba8e] hover:bg-[#0eba8e] hover:text-black text-[#0eba8e] font-bold text-xl py-4 rounded-xl transition-all active:scale-95"
+            className="w-full bg-black border-2 border-[#0eba8e] hover:bg-[#0eba8e] hover:text-black text-[#0eba8e] font-bold text-xl py-4 rounded-xl transition-all active:scale-95 shrink-0"
           >
             Play Again
           </button>

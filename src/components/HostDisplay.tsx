@@ -96,6 +96,7 @@ export function HostDisplay() {
                       <span className="font-bold">
                         <span className="text-[#0eba8e]/70 mr-3">#{idx + 1}</span>
                         <span>{item.name}</span>
+                        <span className="text-[#0eba8e]/50 ml-3 text-sm">({item.correctCount}/{item.totalQuestions})</span>
                       </span>
                       <span className="font-mono">{item.score} pts</span>
                     </div>
@@ -140,6 +141,7 @@ export function HostDisplay() {
                   <span className="font-bold">
                     <span className="text-[#0eba8e]/70 mr-4">#{idx + 1}</span>
                     <span>{item.name}</span>
+                    <span className="text-[#0eba8e]/50 ml-4 text-base">({item.correctCount}/{item.totalQuestions})</span>
                   </span>
                   <span className="font-mono">{item.score} pts</span>
                 </div>
