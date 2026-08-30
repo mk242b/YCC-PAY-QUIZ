@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Question } from '../server/types';
+import { Trash2, ArrowUp, ArrowDown } from 'lucide-react';
 
 export function QuestionEditor() {
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -18,6 +19,38 @@ export function QuestionEditor() {
       const res = await fetch('/api/questions');
       const data = await res.json();
       setQuestions(data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    if (!confirm('Are you sure you want to delete this question?')) return;
+    try {
+      await fetch(`/api/questions/${id}`, { method: 'DELETE' });
+      fetchQuestions();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleMove = async (index: number, direction: 'up' | 'down') => {
+    if (direction === 'up' && index === 0) return;
+    if (direction === 'down' && index === questions.length - 1) return;
+
+    const newQuestions = [...questions];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    
+    [newQuestions[index], newQuestions[targetIndex]] = [newQuestions[targetIndex], newQuestions[index]];
+    
+    setQuestions(newQuestions);
+
+    try {
+      await fetch('/api/questions/reorder', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ questions: newQuestions })
+      });
     } catch (e) {
       console.error(e);
     }
@@ -132,8 +165,13 @@ export function QuestionEditor() {
             <h2 className="text-2xl font-semibold mb-6">Existing Questions ({questions.length})</h2>
             <div className="flex-1 overflow-y-auto space-y-4 pr-2">
               {questions.map((q, idx) => (
-                <div key={q.id} className="p-4 border border-[#0eba8e]/30 rounded-lg">
-                  <p className="font-bold mb-3 text-lg">{idx + 1}. {q.question}</p>
+                <div key={q.id} className="p-4 border border-[#0eba8e]/30 rounded-lg relative">
+                  <div className="absolute top-4 right-4 flex gap-2">
+                    <button onClick={() => handleMove(idx, 'up')} disabled={idx === 0} className="p-1 text-[#0eba8e]/70 hover:text-[#0eba8e] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"><ArrowUp size={20} /></button>
+                    <button onClick={() => handleMove(idx, 'down')} disabled={idx === questions.length - 1} className="p-1 text-[#0eba8e]/70 hover:text-[#0eba8e] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"><ArrowDown size={20} /></button>
+                    <button onClick={() => handleDelete(q.id)} className="p-1 text-red-500/70 hover:text-red-500 ml-2 transition-colors"><Trash2 size={20} /></button>
+                  </div>
+                  <p className="font-bold mb-3 text-lg pr-24">{idx + 1}. {q.question}</p>
                   <ul className="text-base space-y-2">
                     {q.choices.map((c, i) => (
                       <li key={i} className={i === q.correctIndex ? 'text-green-400 font-bold flex items-center gap-2' : 'text-[#0eba8e]/70 flex items-center gap-2'}>

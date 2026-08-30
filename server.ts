@@ -3,7 +3,7 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import path from 'path';
 import os from 'os';
-import { loadQuestions, loadLeaderboard, saveLeaderboardEntry, addQuestion } from './src/server/storage.js';
+import { loadQuestions, loadLeaderboard, saveLeaderboardEntry, addQuestion, saveQuestions } from './src/server/storage.js';
 import { Question, LeaderboardEntry } from './src/server/types.js';
 import { createServer as createViteServer } from 'vite';
 
@@ -112,7 +112,13 @@ async function startServer() {
       currentScore = 0;
       correctCount = 0;
       currentQuestionIndex = 0;
-      questions = loadQuestions();
+      
+      const loaded = loadQuestions();
+      for (let i = loaded.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [loaded[i], loaded[j]] = [loaded[j], loaded[i]];
+      }
+      questions = loaded;
 
       io.emit('game:ready', { playerName: currentPlayerName, totalQuestions: questions.length });
       setTimeout(startRound, 2000);
@@ -134,6 +140,25 @@ async function startServer() {
     }
     const newQ = addQuestion({ question, choices, correctIndex, timeLimitSec: timeLimitSec || 15 });
     res.json(newQ);
+  });
+
+  app.delete('/api/questions/:id', (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    const list = loadQuestions();
+    const filtered = list.filter(q => q.id !== id);
+    if (filtered.length !== list.length) {
+      saveQuestions(filtered);
+      res.json({ success: true });
+    } else {
+      res.status(404).json({ error: 'Not found' });
+    }
+  });
+
+  app.put('/api/questions/reorder', (req, res) => {
+    const { questions } = req.body;
+    if (!Array.isArray(questions)) return res.status(400).json({ error: 'Invalid data' });
+    saveQuestions(questions);
+    res.json({ success: true });
   });
 
   // Vite middleware for development
