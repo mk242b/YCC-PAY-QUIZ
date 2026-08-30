@@ -33,6 +33,17 @@ async function startServer() {
     return 'localhost';
   }
 
+  function shuffleChoices(q: Question) {
+    const order = q.choices.map((_, i) => i);
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    const original = q.choices;
+    q.choices = order.map(i => original[i]) as Question['choices'];
+    q.correctIndex = order.indexOf(q.correctIndex);
+  }
+
   function startRound() {
     if (currentQuestionIndex >= questions.length) {
       const entry: LeaderboardEntry = {
@@ -48,6 +59,7 @@ async function startServer() {
     }
 
     const q = questions[currentQuestionIndex];
+    shuffleChoices(q);
     roundStartTime = Date.now();
 
     io.emit('round:host', {

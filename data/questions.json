@@ -1,16 +1,142 @@
 [
- {
-  "id": 1,
-  "question": "What is the capital city of Japan?",
-  "choices": ["Kyoto", "Tokyo", "Osaka"],
-  "correctIndex": 1,
-  "timeLimitSec": 15
- },
- {
-  "id": 2,
-  "question": "Which protocol operates at the Transport Layer?",
-  "choices": ["TCP", "HTTP", "IP"],
-  "correctIndex": 0,
-  "timeLimitSec": 10
- }
+  {
+    "id": 1,
+    "question": "YCC Pay က ဘာ App မျိုးလဲ။",
+    "choices": ["Music App", "Mini Mobile Wallet", "Taxi App"],
+    "correctIndex": 1,
+    "timeLimitSec": 10
+  },
+  {
+    "id": 2,
+    "question": "ဘယ်သူတွေကို အဓိက ဦးတည်တာလဲ။",
+    "choices": ["ကျောင်းသား & လူငယ်များ", "ရှယ်ယာကုန်သည်များ", "လေယာဉ်မှူးများ"],
+    "correctIndex": 0,
+    "timeLimitSec": 10
+  },
+  {
+    "id": 3,
+    "question": "ဘယ် App ကို နမူနာယူပြီး ရေးဆွဲထားတာလဲ။",
+    "choices": ["PayPal", "KBZ Pay", "Apple Pay"],
+    "correctIndex": 1,
+    "timeLimitSec": 10
+  },
+  {
+    "id": 4,
+    "question": "\"Split Pay\" က ဘာလုပ်ပေးတာလဲ။",
+    "choices": ["ဘေလ် မျှဝေရှင်းပေးခြင်း", "ဖုန်း Screen နှစ်ခြမ်းခွဲခြင်း", "ငွေ ၂ ဆ တိုးပေးခြင်း"],
+    "correctIndex": 0,
+    "timeLimitSec": 10
+  },
+  {
+    "id": 5,
+    "question": "\"Fun Pay\" က ဘေလ်ရှင်းမယ့်သူကို ဘယ်လိုရွေးတာလဲ။",
+    "choices": ["အသက်အကြီးဆုံးသူ", "ကျပန်း (Random) ၁ ယောက်တည်း", "Battery အနည်းဆုံးသူ"],
+    "correctIndex": 1,
+    "timeLimitSec": 10
+  },
+  {
+    "id": 6,
+    "question": "\"P2P Transfer\" ဆိုတာ ဘာလဲ။",
+    "choices": ["Pass to Password", "လူအချင်းချင်း ငွေလွှဲခြင်း", "စာရွက် ပရင့်ထုတ်ခြင်း"],
+    "correctIndex": 1,
+    "timeLimitSec": 10
+  },
+  {
+    "id": 7,
+    "question": "YCC Pay ထဲ ငွေဘယ်လိုဖြည့် (Top-up) မလဲ။",
+    "choices": ["စာတိုက်က ငွေပို့ခြင်း", "Merchant (ကိုယ်စားလှယ်) ဆီမှ", "ဖုန်းလှုပ်ခါခြင်း"],
+    "correctIndex": 1,
+    "timeLimitSec": 10
+  },
+  {
+    "id": 8,
+    "question": "Backend ကို ဘာနဲ့ ရေးထားတာလဲ။",
+    "choices": ["Java EE", "Ruby", "Swift"],
+    "correctIndex": 0,
+    "timeLimitSec": 10
+  },
+  {
+    "id": 9,
+    "question": "Data တွေကို ဘယ် Database မှာ သိမ်းတာလဲ။",
+    "choices": ["MongoDB", "MySQL", "Excel"],
+    "correctIndex": 1,
+    "timeLimitSec": 10
+  },
+  {
+    "id": 10,
+    "question": "Frontend (UI) ကို ဘာတွေနဲ့ တည်ဆောက်ထားတာလဲ။",
+    "choices": ["HTML, CSS, JS", "C++", "Flutter"],
+    "correctIndex": 0,
+    "timeLimitSec": 10
+  },
+  {
+    "id": 11,
+    "question": "စနစ်တစ်ခုလုံးကို ဘယ်သူက ထိန်းချုပ်တာလဲ။",
+    "choices": ["Guest", "Admin (စီမံခန့်ခွဲသူ)", "ဖုန်းဆိုင်"],
+    "correctIndex": 1,
+    "timeLimitSec": 10
+  },
+  {
+    "id": 12,
+    "question": "P2P နဲ့ လွှဲလိုက်တဲ့ငွေက ဘယ်ရောက်သွားမလဲ။",
+    "choices": ["လက်ခံသူရဲ့ Wallet ထဲ", "ထီပုံးထဲ", "Gmail ထဲ"],
+    "correctIndex": 0,
+    "timeLimitSec": 10
+  },
+  {
+    "id": 13,
+    "question": "\"Split Pay\" ကို ဘယ်အချိန်မှာ အသုံးအများဆုံးလဲ။",
+    "choices": ["သူငယ်ချင်းတွေ အတူစားပြီး ဘေလ်ခွဲရှင်းချိန်", "တစ်ယောက်တည်း ကားစီးချိန်", "စာမေးပွဲဖြေချိန်"],
+    "correctIndex": 0,
+    "timeLimitSec": 10
+  },
+  {
+    "id": 14,
+    "question": "\"Fun Pay\" ကို လူငယ်တွေ ဘာလို့ ကြိုက်ကြတာလဲ။",
+    "choices": ["ဂိမ်းဆော့သလို ကံစမ်းပြီး ရှင်းရလို့", "အလကား စားရလို့", "ဖုန်းဘေလ် ရလို့"],
+    "correctIndex": 0,
+    "timeLimitSec": 10
+  },
+  {
+    "id": 15,
+    "question": "YCC Pay သုံးဖို့ ဘာပစ္စည်း လိုအပ်လဲ။",
+    "choices": ["စူပါကွန်ပျူတာ", "စမတ်ဖုန်း / Browser", "Scanner စက်ကြီး"],
+    "correctIndex": 1,
+    "timeLimitSec": 10
+  },
+  {
+    "id": 16,
+    "question": "ငွေလွှဲပြီးရင် ကိုယ့်လက်ကျန်ငွေ ဘာဖြစ်သွားမလဲ။",
+    "choices": ["လွှဲငွေပမာဏအတိုင်း နုတ်ယူသွားမည်", "၂ ဆ တိုးလာမည်", "သုည ဖြစ်သွားမည်"],
+    "correctIndex": 0,
+    "timeLimitSec": 10
+  },
+  {
+    "id": 17,
+    "question": "Merchant (ကိုယ်စားလှယ်) ရဲ့ အဓိကအလုပ်က ဘာလဲ။",
+    "choices": ["ငွေသွင်း / ငွေထုတ် ဝန်ဆောင်မှု", "Code ရေးပေးခြင်း", "ဖုန်းပြင်ပေးခြင်း"],
+    "correctIndex": 0,
+    "timeLimitSec": 10
+  },
+  {
+    "id": 18,
+    "question": "ကျောင်းဝင်းထဲ YCC Pay သုံးခြင်းရဲ့ အားသာချက်က ဘာလဲ။",
+    "choices": ["ငွေသားမလို၊ ငွေပေးချေမှု မြန်ဆန်ခြင်း", "ဖုန်း Storage တိုးခြင်း", "ကြိုးမဲ့ အားသွင်းရခြင်း"],
+    "correctIndex": 0,
+    "timeLimitSec": 10
+  },
+  {
+    "id": 19,
+    "question": "\"Fun Pay\" တစ်ကြိမ်မှာ ဘေလ်ရှင်းဖို့ လူဘယ်နှစ်ယောက် ရွေးတာလဲ။",
+    "choices": ["၁ ယောက်တည်း", "၅ ယောက်", "အားလုံး"],
+    "correctIndex": 0,
+    "timeLimitSec": 10
+  },
+  {
+    "id": 20,
+    "question": "အောက်ပါတို့အနက် ဘယ်အရာက YCC Pay Feature မဟုတ်ဘူးလဲ။",
+    "choices": ["Split Pay", "Fun Pay", "ဒရုန်း (Drone) ပစ္စည်းပို့စနစ်"],
+    "correctIndex": 2,
+    "timeLimitSec": 10
+  }
 ]

@@ -16,7 +16,11 @@ export default defineConfig(() => {
       // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',
       // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
-      watch: process.env.DISABLE_HMR === 'true' ? null : {},
+      // Ignore the data/ dir: the server rewrites leaderboard.json/questions.json at runtime,
+      // and watching them triggers a full page reload mid-game.
+      watch: process.env.DISABLE_HMR === 'true' ? null : {
+        ignored: ['**/data/**'],
+      },
     },
   };
 });
