@@ -1,0 +1,6 @@
+{
+  "name": "Quiz Arena",
+  "description": "Dual-Device Local Quiz System with Host Display and Player Remote",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

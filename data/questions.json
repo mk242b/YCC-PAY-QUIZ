@@ -1,0 +1,16 @@
+[
+ {
+  "id": 1,
+  "question": "What is the capital city of Japan?",
+  "choices": ["Kyoto", "Tokyo", "Osaka"],
+  "correctIndex": 1,
+  "timeLimitSec": 15
+ },
+ {
+  "id": 2,
+  "question": "Which protocol operates at the Transport Layer?",
+  "choices": ["TCP", "HTTP", "IP"],
+  "correctIndex": 0,
+  "timeLimitSec": 10
+ }
+]
