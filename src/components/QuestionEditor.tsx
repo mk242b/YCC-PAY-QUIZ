@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type FormEvent } from 'react';
 import { Question } from '../server/types';
 import { Trash2, ArrowUp, ArrowDown } from 'lucide-react';
 
@@ -56,7 +56,7 @@ export function QuestionEditor() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setStatus('Saving...');
     try {

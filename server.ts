@@ -25,12 +25,20 @@ async function startServer() {
 
   function getLocalIp(): string {
     const nets = os.networkInterfaces();
+    const candidates: string[] = [];
     for (const name of Object.keys(nets)) {
       for (const net of nets[name] || []) {
-        if (net.family === 'IPv4' && !net.internal) return net.address;
+        if (net.family === 'IPv4' && !net.internal) {
+          const addr = net.address;
+          const isLinkLocal = /^169\.254\./.test(addr);
+          if (!isLinkLocal) candidates.push(addr);
+        }
       }
     }
-    return 'localhost';
+    const privateIp = candidates.find(addr =>
+      /^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/.test(addr)
+    );
+    return privateIp || candidates[0] || 'localhost';
   }
 
   function shuffleChoices(q: Question) {

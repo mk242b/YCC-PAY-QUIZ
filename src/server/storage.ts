@@ -8,13 +8,21 @@ const LEADERBOARD_PATH = path.join(process.cwd(), 'data/leaderboard.json');
 export function loadQuestions(): Question[] {
   if (!fs.existsSync(QUESTIONS_PATH)) return [];
   const raw = fs.readFileSync(QUESTIONS_PATH, 'utf-8');
-  return JSON.parse(raw);
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return [];
+  }
 }
 
 export function loadLeaderboard(): LeaderboardEntry[] {
   if (!fs.existsSync(LEADERBOARD_PATH)) return [];
   const raw = fs.readFileSync(LEADERBOARD_PATH, 'utf-8');
-  return JSON.parse(raw);
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return [];
+  }
 }
 
 export function saveLeaderboardEntry(entry: LeaderboardEntry): LeaderboardEntry[] {
